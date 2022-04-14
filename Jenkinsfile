@@ -98,8 +98,7 @@ pipeline {
       sh 'docker stop ${CONTAINER_NAME}'
       sh 'docker rm ${CONTAINER_NAME}'
       sh 'docker rmi ${CONTAINER_TAG}'
-      sh 'docker stop ${DB_NAME}'
-      sh 'docker rm ${DB_NAME}'
+      sh 'rm -rf volume'
     }
   }
 }
