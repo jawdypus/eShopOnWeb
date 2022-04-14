@@ -68,8 +68,8 @@ pipeline {
         stage('Api'){
           steps{
             sh "docker exec ${CONTAINER_NAME} dotnet publish --self-contained ./src/PublicApi/PublicApi.csproj -o ./src/PublicApi/bin/Publish/PublicApi/ -v d -r linux-x64"
-            sh "mkdir -p src/PublicApi/bin/Publish/"
-            sh "docker cp ${CONTAINER_NAME}:/usr/work/src/PublicApi/bin/Publish/PublicApi ${env.WORKSPACE}/src/PublicApi/bin/Publish/"
+            sh "mkdir -p src/PublicApi/bin/Publish/PublicApi/"
+            sh "docker cp ${CONTAINER_NAME}:/usr/work/src/PublicApi/bin/Publish/PublicApi/* ${env.WORKSPACE}/src/PublicApi/bin/Publish/"
           }
         }
       }
@@ -81,12 +81,12 @@ pipeline {
     }
     stage('Push Image'){
       parallel{
-        stage('Web'){
-          steps{
-            sh "docker build . -t ravenfill/eshop_web:${env.BUILD_NUMBER} -f ./src/Web/Dockerfile"
-            sh "docker push ravenfill/eshop_web:${env.BUILD_NUMBER}"
-          }
-        }
+        //stage('Web'){
+        //  steps{
+        //    sh "docker build . -t ravenfill/eshop_web:${env.BUILD_NUMBER} -f ./src/Web/Dockerfile"
+        //    sh "docker push ravenfill/eshop_web:${env.BUILD_NUMBER}"
+        //  }
+        //}
         stage('Api'){
           steps{
             sh "docker build . -t ravenfill/eshop_api:${env.BUILD_NUMBER} -f ./src/PublicApi/Dockerfile"
