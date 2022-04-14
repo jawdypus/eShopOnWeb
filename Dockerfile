@@ -4,5 +4,3 @@ RUN mkdir -p /usr/work
 WORKDIR /usr/work
 
 COPY . /usr/work
-
-CMD date >> /var/log/date.log

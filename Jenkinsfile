@@ -13,9 +13,9 @@ pipeline {
     }
     stage('Containers'){
       steps {
-        mkdir "volume"
+        sh "mkdir -p volume"
         sh "docker build -t ${CONTAINER_TAG} ."
-        sh "docker run -d --name ${CONTAINER_NAME} -v /usr/work:${env.WORKSPACE}/volume ${CONTAINER_TAG}"
+        sh "docker run -d --name ${CONTAINER_NAME} -v /usr/work:${env.WORKSPACE}/volume ${CONTAINER_TAG} watch 'date >> /var/log/date.log'"
       }
     }
     stage('Restore'){
