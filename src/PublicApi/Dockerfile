@@ -4,5 +4,5 @@ EXPOSE 80
 EXPOSE 443
 
 WORKDIR /app
-COPY ./bin/Publish/PublicApi/* ./
+ADD  ./bin/Publish/PublicApi/ .
 ENTRYPOINT ["dotnet", "PublicApi.dll"]
