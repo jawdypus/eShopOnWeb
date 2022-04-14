@@ -7,5 +7,5 @@ EXPOSE 443
 
 FROM base AS final
 WORKDIR /app
-COPY COPY ../../volume/PublicApi ./
+COPY ./bin/Publish/PublicApi/ ./
 ENTRYPOINT ["dotnet", "PublicApi.dll"]
