@@ -10,7 +10,7 @@ pipeline {
       steps {
         sh "mkdir -p volume"
         sh "docker build -t ${CONTAINER_TAG} ."
-        sh "docker run -d --name ${CONTAINER_NAME} -v ${env.WORKSPACE}/volume:/usr/work ${CONTAINER_TAG} watch 'date >> /var/log/date.log'"
+        sh "docker run -d --name ${CONTAINER_NAME} ${CONTAINER_TAG} watch 'date >> /var/log/date.log'"
         sh "ls -la"
         sh "ls -la volume"
       }
@@ -57,12 +57,14 @@ pipeline {
       parallel{
         stage('Web'){
           steps{
-           sh "docker exec ${CONTAINER_NAME} dotnet publish ./src/Web/Web.csproj -o ./src/Web/bin/Publish/Web/ -v d -r linux-x64"
+            sh "docker exec ${CONTAINER_NAME} dotnet publish ./src/Web/Web.csproj -o ./src/Web/bin/Publish/Web/ -v d -r linux-x64"
+            sh "docker cp ${CONTAINER_NAME}:/usr/work/src/Web/bin/Publish/Web ${env.WORKSPACE}/src/bin/Publish/"
           }
         }
         stage('Api'){
           steps{
             sh "docker exec ${CONTAINER_NAME} dotnet publish ./src/PublicApi/PublicApi.csproj -o ./src/PublicApi/bin/Publish/PublicApi/ -v d -r linux-x64"
+            sh "docker cp ${CONTAINER_NAME}:/usr/work/src/PublicApi/bin/Publish/PublicApi ${env.WORKSPACE}/src/bin/Publish/"
           }
         }
       }
@@ -76,13 +78,13 @@ pipeline {
       parallel{
         stage('Web'){
           steps{
-            sh "docker build . -t ravenfill/eshop_web:${env.BUILD_NUMBER} -f volume/src/Web/Dockerfile"
+            sh "docker build . -t ravenfill/eshop_web:${env.BUILD_NUMBER} -f ./src/Web/Dockerfile"
             sh "docker push ravenfill/eshop_web:${env.BUILD_NUMBER}"
           }
         }
         stage('Api'){
           steps{
-            sh "docker build . -t ravenfill/eshop_api:${env.BUILD_NUMBER} -f volume/src/PublicApi/Dockerfile"
+            sh "docker build . -t ravenfill/eshop_api:${env.BUILD_NUMBER} -f ./src/PublicApi/Dockerfile"
             sh "docker push ravenfill/eshop_api:${env.BUILD_NUMBER}"
           }
         }
