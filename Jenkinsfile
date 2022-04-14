@@ -18,11 +18,11 @@ pipeline {
     
     stage('Restore'){
       parallel{
-        stage('Web'){
-          steps{
-            sh "docker exec ${CONTAINER_NAME} dotnet restore ./src/Web/"
-          }
-        }
+        //stage('Web'){
+        //  steps{
+        //    sh "docker exec ${CONTAINER_NAME} dotnet restore ./src/Web/"
+        //  }
+        //}
         stage('Api'){
           steps{
             sh "docker exec ${CONTAINER_NAME} dotnet restore ./src/PublicApi/"
