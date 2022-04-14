@@ -6,11 +6,6 @@ pipeline {
     DOCKERHUB_CREDENTIALS=credentials('48caa4ed-1758-4fc4-8260-17418ce9cde9')
   }
   stages {
-    stage('Checkout'){
-      steps {
-        git branch: 'main', changelog: false, poll: false, url: 'https://github.com/jawdypus/eShopOnWeb.git'
-      }
-    }
     stage('Containers'){
       steps {
         sh "mkdir -p volume"
