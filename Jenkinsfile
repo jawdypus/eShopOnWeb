@@ -15,7 +15,7 @@ pipeline {
         sh "ls -la volume"
       }
     }
-    /* 
+    
     stage('Restore'){
       parallel{
         stage('Web'){
@@ -30,6 +30,7 @@ pipeline {
         }
       }
     }
+    /* 
     stage('UnitTests'){
       steps {
         sh "docker exec ${CONTAINER_NAME} dotnet test ./tests/UnitTests/UnitTests.csproj"
@@ -66,7 +67,7 @@ pipeline {
         }
         stage('Api'){
           steps{
-            sh "docker exec ${CONTAINER_NAME} dotnet publish ./src/PublicApi/PublicApi.csproj -o ./src/PublicApi/bin/Publish/PublicApi/ -v d -r linux-x64"
+            sh "docker exec ${CONTAINER_NAME} dotnet publish --self-contained ./src/PublicApi/PublicApi.csproj -o ./src/PublicApi/bin/Publish/PublicApi/ -v d -r linux-x64"
             sk "mkdir -p src/PublicApi/bin/Publish/"
             sh "docker cp ${CONTAINER_NAME}:/usr/work/src/PublicApi/bin/Publish/PublicApi ${env.WORKSPACE}/src/PublicApi/bin/Publish/"
           }
