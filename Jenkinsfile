@@ -15,6 +15,7 @@ pipeline {
         sh "ls -la volume"
       }
     }
+    /* 
     stage('Restore'){
       parallel{
         stage('Web'){
@@ -53,6 +54,7 @@ pipeline {
         sh "docker exec ${CONTAINER_NAME} dotnet test ./tests/FunctionalTests/FunctionalTests.csproj"
       }
     }
+    */
     stage('Publish'){
       parallel{
         stage('Web'){
