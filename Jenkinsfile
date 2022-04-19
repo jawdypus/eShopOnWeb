@@ -8,8 +8,8 @@ pipeline {
   stages {
     stage('Containers'){
       steps {
-        sh "docker build -t ${CONTAINER_TAG} ."
-        sh "docker run -d --name ${CONTAINER_NAME} ${CONTAINER_TAG} watch 'date >> /var/log/date.log'"
+        sh "docker build -t ${CONTAINER_TAG}:${env.BUILD_NUMBER} ."
+        sh "docker run -d --name ${CONTAINER_NAME}:${env.BUILD_NUMBER} ${CONTAINER_TAG} watch 'date >> /var/log/date.log'"
       }
     }
     
