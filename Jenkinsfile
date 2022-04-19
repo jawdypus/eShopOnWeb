@@ -3,6 +3,8 @@ pipeline {
   environment {
     CONTAINER_TAG = "eshop_test:${env.BUILD_NUMBER}"
     CONTAINER_NAME = "${env.JOB_NAME}_${env.BUILD_NUMBER}"
+    API_NAME = "ravenfill/eshop_api:${env.BUILD_NUMBER}"
+    WEB_NAME = "ravenfill/eshop_web:${env.BUILD_NUMBER}"
     DOCKERHUB_CREDENTIALS=credentials('48caa4ed-1758-4fc4-8260-17418ce9cde9')
   }
   stages {
@@ -55,12 +57,12 @@ pipeline {
       parallel{
         stage('Web'){
           steps{
-            sh "docker build . -t ravenfill/eshop_web:${env.BUILD_NUMBER} -f ./src/Web/Dockerfile"
+            sh "docker build . -t ${WEB_NAME} -f ./src/Web/Dockerfile"
           }
         }
         stage('PublicApi'){
           steps{
-            sh "docker build . -t ravenfill/eshop_api:${env.BUILD_NUMBER} -f ./src/PublicApi/Dockerfile"
+            sh "docker build . -t ${API_NAME} -f ./src/PublicApi/Dockerfile"
           }
         }
       }
@@ -74,12 +76,12 @@ pipeline {
       parallel{
         stage('Web'){
           steps{
-            sh "docker push ravenfill/eshop_web:${env.BUILD_NUMBER}"
+            sh "docker push ${WEB_NAME}"
           }
         }
         stage('Api'){
           steps{
-            sh "docker push ravenfill/eshop_api:${env.BUILD_NUMBER}"
+            sh "docker push ${API_NAME}"
           }
         }
       }
@@ -91,8 +93,8 @@ pipeline {
       sh 'docker stop ${CONTAINER_NAME}'
       sh 'docker rm ${CONTAINER_NAME}'
       sh 'docker rmi ${CONTAINER_TAG}'
-      sh 'docker rmi ravenfill/eshop_web:${env.BUILD_NUMBER}'
-      sh 'docker rmi ravenfill/eshop_api:${env.BUILD_NUMBER}'
+      sh 'docker rmi ${WEB_NAME}'
+      sh 'docker rmi ${API_NAME}'
     }
   }
 }
